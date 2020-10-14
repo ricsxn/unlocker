@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# unlocker controller script
+#
+
+install() {
+  printf "Installing service ... "
+  cat it.ricsxn.unlocker.plist | sed s#%UNLOCKERPATH%#"$PWD"#g > ~/Library/LaunchAgents/
+  launchctl load ~/Library/LaunchAgents/it.ricsxn.unlocker.plist
+  echo "done"
+}
+
+uninstall() {
+  printf "Uninstalling service ... "
+  launchctl stop it.ricsxn.unlocker
+  launchctl unload ~/Library/LaunchAgents/it.ricsxn.unlocker.plist
+  echo "done"
+}
+
+case "$@" in
+  "install")
+    install
+    ;;
+  "uninstall")
+    uninstall
+    ;;
+  "reinstall")
+    uninstall
+    install
+    ;;
+  "run")
+    . ./venv3/bin/activate && ./unlocker3.py
+    ;;
+*) cat <<EOF
+Use one of the following:
+    install    - to install the service 
+    uninstall  - to uninstall the service
+    reinstall  - uninstall and reintall the service
+EOF
+esac
