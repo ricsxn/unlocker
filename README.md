@@ -93,3 +93,5 @@ THis is the last step and requires only to execute a bash script that will insta
 **Attention** New mac OS releases, may require to enable **accessibility** to the `bash` application; please allow this otherwise the service will not work.
 
 At this stage the utility should work.
+
+**Attention** IOS users may need to go on `Setting/Bluetooth` panel in order to make the device discoverable.
