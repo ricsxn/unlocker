@@ -34,14 +34,16 @@ logging.config.fileConfig('logging.conf')
 logger = None
 
 allowed_devices = [
-    {"name": "iPhone6s di Riccardo",
-     "addr": b"04:4B:ED:2F:89:A6"},
+    {"name": "<your device name>",
+     "addr": b"<your device address>"},
 ]
 
 user_credentials = {
-    "user": "riccardobruno",
-    "password": b"gAAAAABfhueOrE6-IF3aG_OIC3ZkFx0Yga0frgM0qiZZtnp7sNaepASOh2e7BSrNrKihw6gsY_aBJQROWRF-BIUv_iwcjibFCw==",
+    "user": "<your username (unused)>",
+    "password": b"<your encrypted password (see genkey.py code)>",
 }
+
+unlock_delay = 10
 
 def check_devices():
     addr = name = None
@@ -73,13 +75,16 @@ def check_devices():
             if allowed_addr is not None and name == allowed_name:
                 allow_fields += 1
                 allow_counter += 1
-            if allow_fields == allow_counter:
+            if allow_counter > 0 and allow_fields == allow_counter:
                 if under_lock():
+                    logger.info("Unlocking with device {} - {}".format(allowed_name, allowed_addr))
                     unlock()
+                    logger.debug("Waiting {} seconds before return to the loop".format(unlock_delay))
+                    time.sleep(unlock_delay)
                 else:
                     logger.debug("already unlocked")
-            else:
-                logger.debug("still lock")
+                return 
+        logger.debug("No unlock devices found")
 
 def unlock():
     logger.debug("Unlocking ...")
@@ -103,5 +108,6 @@ if __name__ == '__main__':
         if under_lock():
             check_devices()
             time.sleep(.10)
+
 
 
