@@ -38,6 +38,8 @@ allowed_devices = [
      "addr": b"<your device address>"},
 ]
 
+lock_allowed = False
+
 user_credentials = {
     "user": "<your username (unused)>",
     "password": b"<your encrypted password (see genkey.py code)>",
@@ -52,10 +54,10 @@ def get_devices():
     nearby_devices = bluetooth.discover_devices(duration=1,
                                                 lookup_names=True,
                                                 flush_cache=True)
-    return nearby_devices
+    return nearby_devices 
 
-def unlock_devices(nearby_devices):   
 
+def unlock_devices(nearby_devices):
     if nearby_devices is not None:
         logger.debug("Found {} devices".format(len(nearby_devices)))
         
@@ -64,7 +66,6 @@ def unlock_devices(nearby_devices):
                 logger.debug("   {} - {}".format(addr, name))
             except UnicodeEncodeError:
                 logger.debug("   {} - {}".format(addr, name.encode("utf-8", "replace")))
-
             
             for dev in allowed_devices:
                 allow_fields = 0
@@ -86,9 +87,9 @@ def unlock_devices(nearby_devices):
                         time.sleep(unlock_delay)
                     else:
                         logger.debug("already unlocked")
+                    return
     else:
         logger.debug("No devices found")
-
 
 def unlock(name, addr):
     logger.info("Unlocking with device {} - {}".format(name, addr))
@@ -97,10 +98,33 @@ def unlock(name, addr):
     
     subprocess.call("""caffeinate -u -t 1""", shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to key code 123'""", shell=True)
+    #for i in range(0, 128):
+    #    subprocess.call("""osascript -e 'tell application "System Events" to key code 48'""", shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to keystroke "%s"'""" % decrypted_password, shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to keystroke return'""", shell=True)
     logger.debug("Unlock done")
 
+
+def lock_devices(unlock_dev):
+    for dev in allowed_devices:
+        allow_counter = 0
+        allowed_name = unlock_dev[0]
+        allowed_addr = unlock_dev[1]
+        if allowed_name is None and allowed_addr is None:
+            continue
+        if allowed_name is not None and name == allowed_name:
+            allow_counter += 1
+            break
+        if allowed_addr is not None and name == allowed_name:
+            allow_counter += 1
+            break
+    if allow_counter == 0:
+        if not under_lock():
+            logger.debug("Unlock device no longer in range, locking ...")
+            subprocess.call("""pmset displaysleepnow""", shell=True)
+            logger.debug("Lock done")
+    else:
+        logger.debug("Unlock device still in range")
 
 def under_lock():
     session_dict=Quartz.CGSessionCopyCurrentDictionary()
@@ -112,10 +136,14 @@ def under_lock():
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     logger.debug("Starting unlocker")
+    unlock_dev = (None,None)
     while True:
         devices = get_devices()
         if under_lock():
-            unlock_devices(devices)
+            unlock_dev = unlock_devices(devices)
+        else:
+            if lock_allowed is True:
+                lock_devices(unlock_dev)
         time.sleep(.10)
             
 
