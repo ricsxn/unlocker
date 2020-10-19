@@ -47,49 +47,52 @@ user_credentials = {
 
 unlock_delay = 10
 
+unlock_delay = 10
+
 def get_devices():
     addr = name = None
 
     logger.debug("Discovering devices ...")
-    nearby_devices = bluetooth.discover_devices(duration=1,
-                                                lookup_names=True,
-                                                flush_cache=True)
+    try:
+        nearby_devices = bluetooth.discover_devices(duration=1,
+                                                    lookup_names=True,
+                                                    flush_cache=True)
+        logger.debug("Found {} devices".format(len(nearby_devices)))
+    except:
+        logger.error("Failed to discover bluetooth devices")
+        nearby_devices = None
+
     return nearby_devices 
 
 
 def unlock_devices(nearby_devices):
-    if nearby_devices is not None:
-        logger.debug("Found {} devices".format(len(nearby_devices)))
+    for addr, name in nearby_devices:
+        try:
+            logger.debug("   {} - {}".format(addr, name))
+        except UnicodeEncodeError:
+            logger.debug("   {} - {}".format(addr, name.encode("utf-8", "replace")))
         
-        for addr, name in nearby_devices:
-            try:
-                logger.debug("   {} - {}".format(addr, name))
-            except UnicodeEncodeError:
-                logger.debug("   {} - {}".format(addr, name.encode("utf-8", "replace")))
-            
-            for dev in allowed_devices:
-                allow_fields = 0
-                allow_counter = 0
-                allowed_name = dev.get("name", None)
-                allowed_addr = dev.get("addr", None)
-                if allowed_name is None and allowed_addr is None:
-                    continue
-                if allowed_name is not None and name == allowed_name:
-                    allow_fields += 1
-                    allow_counter += 1
-                if allowed_addr is not None and name == allowed_name:
-                    allow_fields += 1
-                    allow_counter += 1
-                if allow_counter > 0 and allow_fields == allow_counter:
-                    if under_lock():
-                        unlock(allowed_name, allowed_addr)
-                        logger.debug("Waiting {} seconds before return to the loop".format(unlock_delay))
-                        time.sleep(unlock_delay)
-                    else:
-                        logger.debug("already unlocked")
-                    return
-    else:
-        logger.debug("No devices found")
+        for dev in allowed_devices:
+            allow_fields = 0
+            allow_counter = 0
+            allowed_name = dev.get("name", None)
+            allowed_addr = dev.get("addr", None)
+            if allowed_name is None and allowed_addr is None:
+                continue
+            if allowed_name is not None and name == allowed_name:
+                allow_fields += 1
+                allow_counter += 1
+            if allowed_addr is not None and name == allowed_name:
+                allow_fields += 1
+                allow_counter += 1
+            if allow_counter > 0 and allow_fields == allow_counter:
+                if under_lock():
+                    unlock(allowed_name, allowed_addr)
+                    logger.debug("Waiting {} seconds before return to the loop".format(unlock_delay))
+                    time.sleep(unlock_delay)
+                else:
+                    logger.debug("System already unlocked")
+    return
 
 def unlock(name, addr):
     logger.info("Unlocking with device {} - {}".format(name, addr))
@@ -98,10 +101,10 @@ def unlock(name, addr):
     
     subprocess.call("""caffeinate -u -t 1""", shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to key code 123'""", shell=True)
-    #for i in range(0, 128):
-    #    subprocess.call("""osascript -e 'tell application "System Events" to key code 48'""", shell=True)
+    subprocess.call("""osascript -e 'tell application "System Events" to keystroke "a" using {command down}'""", shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to keystroke "%s"'""" % decrypted_password, shell=True)
     subprocess.call("""osascript -e 'tell application "System Events" to keystroke return'""", shell=True)
+
     logger.debug("Unlock done")
 
 
@@ -138,13 +141,13 @@ if __name__ == '__main__':
     logger.debug("Starting unlocker")
     unlock_dev = (None,None)
     while True:
-        devices = get_devices()
         if under_lock():
-            unlock_dev = unlock_devices(devices)
+            devices = get_devices()
+            if devices is not None:
+                unlock_dev = unlock_devices(devices)
         else:
             if lock_allowed is True:
-                lock_devices(unlock_dev)
+                devices = get_devices()
+                if devices is not None:
+                    lock_devices(unlock_dev)
         time.sleep(.10)
-            
-
-
