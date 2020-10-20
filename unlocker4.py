@@ -38,23 +38,21 @@ allowed_devices = [
      "addr": b"<your device address>"},
 ]
 
-lock_allowed = False
-
 user_credentials = {
     "user": "<your username (unused)>",
     "password": b"<your encrypted password (see genkey.py code)>",
 }
 
-unlock_delay = 10
+lock_allowed = False
 
-unlock_delay = 10
+unlock_delay = 3
 
 def get_devices():
     addr = name = None
 
     logger.debug("Discovering devices ...")
     try:
-        nearby_devices = bluetooth.discover_devices(duration=1,
+        nearby_devices = bluetooth.discover_devices(duration=3,
                                                     lookup_names=True,
                                                     flush_cache=True)
         logger.debug("Found {} devices".format(len(nearby_devices)))
@@ -90,6 +88,10 @@ def unlock_devices(nearby_devices):
                     unlock(allowed_name, allowed_addr)
                     logger.debug("Waiting {} seconds before return to the loop".format(unlock_delay))
                     time.sleep(unlock_delay)
+                    if under_lock():
+                        logger.error("It was not possible to unlock the system")
+                    else:
+                        logger.info("System unlocked successfully")
                 else:
                     logger.debug("System already unlocked")
     return
