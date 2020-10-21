@@ -19,8 +19,7 @@ Notes:
     https://apple.stackexchange.com/questions/259508/how-to-unlock-my-mac-remotely
  
 """
-
-import bluetooth
+import json
 import os
 import sys
 import subprocess
@@ -51,30 +50,25 @@ def get_devices():
     addr = name = None
 
     logger.debug("Discovering devices ...")
-    try:
-        nearby_devices = bluetooth.discover_devices(duration=3,
-                                                    lookup_names=True,
-                                                    flush_cache=True)
-        logger.debug("Found {} devices".format(len(nearby_devices)))
-    except:
-        logger.error("Failed to discover bluetooth devices")
-        nearby_devices = None
-
-    return nearby_devices 
+    p = subprocess.Popen("/usr/local/bin/blueutil  --inquiry 1 --format json",
+                        shell=True,
+                        stdout=subprocess.PIPE, )
+    stdout = p.communicate()[0]
+    logger.debug("blueutil: %s" % stdout)
+    return json.loads(stdout)
 
 
 def unlock_devices(nearby_devices):
-    for addr, name in nearby_devices:
-        try:
-            logger.debug("   {} - {}".format(addr, name))
-        except UnicodeEncodeError:
-            logger.debug("   {} - {}".format(addr, name.encode("utf-8", "replace")))
+    for nbdev in nearby_devices:
+        addr = nbdev.get("address", None)
+        name = nbdev.get("name", None)
+        logger.debug("   {} - {}".format(addr, name))
         
         for dev in allowed_devices:
             allow_fields = 0
             allow_counter = 0
             allowed_name = dev.get("name", None)
-            allowed_addr = dev.get("addr", None)
+            allowed_addr = dev.get("address", None)
             if allowed_name is None and allowed_addr is None:
                 continue
             if allowed_name is not None and name == allowed_name:

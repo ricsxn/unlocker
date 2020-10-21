@@ -1,6 +1,5 @@
 altgraph==0.17
 cryptography==3.1.1
-PyBluez==0.23
 pycparser==2.20
 pyfiglet==0.8.post1
 pyobjc==6.2.2
