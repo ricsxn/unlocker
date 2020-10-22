@@ -5,7 +5,7 @@
 
 install() {
   printf "Installing service ... "
-  cat it.ricsxn.unlocker.plist | sed s#%UNLOCKERPATH%#"$PWD"#g > ~/Library/LaunchAgents/
+  cat it.ricsxn.unlocker.plist | sed s#%UNLOCKERPATH%#"$PWD"#g > ~/Library/LaunchAgents/it.ricsxn.unlocker.plist
   launchctl load ~/Library/LaunchAgents/it.ricsxn.unlocker.plist
   echo "done"
 }
@@ -29,7 +29,7 @@ case "$@" in
     install
     ;;
   "run")
-    . ./venv3/bin/activate && ./unlocker3.py
+    . ./venv/bin/activate && ./unlocker.py
     ;;
 *) cat <<EOF
 Use one of the following:
