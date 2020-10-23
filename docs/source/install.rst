@@ -60,7 +60,7 @@ finally, install Quartz
     pip install -e ./quartz-0.0.1.dev0.
 
 
-For more information on this phase, please visit [here](https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module).
+For more information on this phase, please visit `here <https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module>`.
 
 3. Generate the key to encrypt the password
 -------------------------------------------
