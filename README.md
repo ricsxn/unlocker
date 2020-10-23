@@ -1,5 +1,7 @@
 # unlocker
 
+[![Documentation Status](https://readthedocs.org/projects/unlocker/badge/?version=latest)](https://unlocker.readthedocs.io/en/latest/?badge=latest)
+
 Unlock your mac using bluetooth devices.
 
 ## Structure
@@ -38,20 +40,32 @@ Go in the source code folder and take care of python requirements
 python3 -m venv ./venv
 . ./venv/bin/activate
 pip install -r requirements.txt
+pip install quartz
 ```
 
-**Attention** One of the requirements is Quartz and it may have problems with direct pip installation. In such case, please use the following instructions:
+**Attention** Quartz is not included into requirements for compatibility purposes with readthedocs. Quartz also may have problems problems with direct pip installation. In such case, please consider the following instructions:
 
 ```
-Run: pip download quartz
-Find the downloaded quartz-0.0.1.dev0.tar.gz
-Extract and in setup.py find the following line
+# Downlowad quartz
+pip download quartz
 
-install_requires=read_dependencies("requirements.txt")
-and change it to:
+# pip still fails, but the file quartz-0.0.1.dev0.tar.gz has been donwloaded, then extract it
+tar xvfz quartz-0.0.1.dev0.tar.gz
 
-install_requires=read_dependencies("quartz.egg-info/requires.txt")
-Run: pip install -e ./quartz-0.0.1.dev0
+# go inside the quartz directory
+cd  quartz-0.0.1.dev0
+
+# Locate and open for editing file setup.py and replace the line
+#
+# install_requires=read_dependencies("requirements.txt"),
+#
+# to :
+#
+# install_requires=read_dependencies("quartz.egg-info/requires.txt"),
+
+# Finally run
+cd ..
+pip install -e ./quartz-0.0.1.dev0
 ```
 
 For more information on this phase, please visit [here](https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module).

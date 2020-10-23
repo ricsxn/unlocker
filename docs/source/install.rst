@@ -27,25 +27,31 @@ Go in the source code folder and take care of python requirements
 
     python3 -m venv ./venv
     . ./venv/bin/activate
-    pip install -r requirements.txt.
+    pip install -r requirements.txt
+    pip install quartz
 
-**Attention** One of the requirements is Quartz and it may have problems with direct pip installation. In such case, please use the following instructions:
+**Attention** Quartz is not included into requirements for compatibility purposes with readthedocs. Quartz also may have problems problems with direct pip installation. In such case, please consider the following instructions:
 
 .. code-block:: bash
 
     pip download quartz
     
-Since Quartz installation fails, ignore the error however find the downloaded ``quartz-0.0.1.dev0.tar.gz`` file and extract it. Inside the generated directory, locate and edit the setup.py file  replacing the following lines
+Quartz installation still fails, ignore the error however find the downloaded ``quartz-0.0.1.dev0.tar.gz`` file and extract it.
+
+.. code-block:: bash
+    tar xvfz quartz-0.0.1.dev0.tar.gz 
+
+Inside the generated directory, locate and edit the setup.py file, replacing the following lines:
 
 .. code-block:: bash
     
-    install_requires=read_dependencies("requirements.txt")
+    install_requires=read_dependencies("requirements.txt"),
     
 to:
 
 .. code-block:: bash
     
-    install_requires=read_dependencies("quartz.egg-info/requires.txt")
+    install_requires=read_dependencies("quartz.egg-info/requires.txt"),
     
 finally, install Quartz
 
