@@ -1,6 +1,6 @@
 # unlocker
 
-Unlock your mac using your bluetooth device.
+Unlock your mac using bluetooth devices.
 
 ## Structure
 
