@@ -39,6 +39,7 @@ Go in the source code folder and take care of python requirements
 Quartz installation still fails, ignore the error however find the downloaded ``quartz-0.0.1.dev0.tar.gz`` file and extract it.
 
 .. code-block:: bash
+
     tar xvfz quartz-0.0.1.dev0.tar.gz 
 
 Inside the generated directory, locate and edit the setup.py file, replacing the following lines:
@@ -60,7 +61,7 @@ finally, install Quartz
     pip install -e ./quartz-0.0.1.dev0.
 
 
-For more information on this phase, please visit `here <https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module>`.
+For more information on this phase, please visit `here <https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module>`_.
 
 3. Generate the key to encrypt the password
 -------------------------------------------
