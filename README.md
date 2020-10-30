@@ -12,7 +12,7 @@ It works discovering bluetooth device inside an infinite loop and as soon the ma
 ## Configuration
 
 Before to install the utility on your mac, it is needed to configure the devices and the password used to unlock the machine.
-The current version is intended to run at user level and it uses just one passowprd value configured inside the `unlocker4.py`. Precise instructions are available under **Installtion** chapter.
+The current version is intended to run at user level and it uses just one passoword value configured inside a python file `config.py`. Precise instructions are available under **Installtion** chapter.
 
 ## Installation
 
@@ -40,35 +40,10 @@ Go in the source code folder and take care of python requirements
 python3 -m venv ./venv
 . ./venv/bin/activate
 pip install -r requirements.txt
-pip install quartz
+pip install pyobjc
 ```
 
-**Attention** Quartz is not included into requirements for compatibility purposes with readthedocs. Quartz also may have problems problems with direct pip installation. In such case, please consider the following instructions:
-
-```
-# Downlowad quartz
-pip download quartz
-
-# pip still fails, but the file quartz-0.0.1.dev0.tar.gz has been donwloaded, then extract it
-tar xvfz quartz-0.0.1.dev0.tar.gz
-
-# go inside the quartz directory
-cd  quartz-0.0.1.dev0
-
-# Locate and open for editing file setup.py and replace the line
-#
-# install_requires=read_dependencies("requirements.txt"),
-#
-# to :
-#
-# install_requires=read_dependencies("quartz.egg-info/requires.txt"),
-
-# Finally run
-cd ..
-pip install -e ./quartz-0.0.1.dev0
-```
-
-For more information on this phase, please visit [here](https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module).
+**Attention** pjobjc is not included into requirements for compatibility purposes with readthedocs.
 
 ### 3) Generate the key to encrypt the password
 
@@ -102,6 +77,7 @@ Execute again the `genkey.py` code to generate the encrypted password value:
 encrypted message: b'... the password encrypted value ...'
 dencrypted message: <... unencrypted password ...>
 ```
+/chmod
 
 **Attention** The execution above will print on the terminal the password, be aware of that. After this operation it is also highly recommended to remove the password value from varialbe `gen_password`.
 
@@ -118,7 +94,7 @@ You can get values of **address** and **name** for respectively the device addre
 
 **Attention** do not forget to make your bluetooth device visibile while doing this step.
 
-From the step avove, take the text of the encrypted password and open the `unlocker.py` code and apply the changes as reported below:
+From the step avove, take the text of the encrypted password and create/open the `config.py` code and apply the changes as reported below:
 
 ```python
 allowed_devices = [

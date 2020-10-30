@@ -28,40 +28,9 @@ Go in the source code folder and take care of python requirements
     python3 -m venv ./venv
     . ./venv/bin/activate
     pip install -r requirements.txt
-    pip install quartz
+    pip install pyobjc
 
-**Attention** Quartz is not included into requirements for compatibility purposes with readthedocs. Quartz also may have problems problems with direct pip installation. In such case, please consider the following instructions:
-
-.. code-block:: bash
-
-    pip download quartz
-    
-Quartz installation still fails, ignore the error however find the downloaded ``quartz-0.0.1.dev0.tar.gz`` file and extract it.
-
-.. code-block:: bash
-
-    tar xvfz quartz-0.0.1.dev0.tar.gz 
-
-Inside the generated directory, locate and edit the setup.py file, replacing the following lines:
-
-.. code-block:: bash
-    
-    install_requires=read_dependencies("requirements.txt"),
-    
-to:
-
-.. code-block:: bash
-    
-    install_requires=read_dependencies("quartz.egg-info/requires.txt"),
-    
-finally, install Quartz
-
-.. code-block:: bash
-    
-    pip install -e ./quartz-0.0.1.dev0.
-
-
-For more information on this phase, please visit `here <https://stackoverflow.com/questions/42530309/no-such-file-requirements-txt-error-while-installing-quartz-module>`_.
+**Attention** pjobjc is not included into requirements for compatibility purposes with readthedocs.
 
 3. Generate the key to encrypt the password
 -------------------------------------------
@@ -116,7 +85,7 @@ You can get values of **address** and **name** for respectively the device addre
 
 **Attention** do not forget to make your bluetooth device visibile while doing this step.
 
-From the step avove, take the text of the encrypted password and open the `unlocker.py` code and apply the changes as reported below:
+From the step avove, take the text of the encrypted password and create/open the `config.py` code and apply the changes as reported below:
 
 .. code-block:: python
 

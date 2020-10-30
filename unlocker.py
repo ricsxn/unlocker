@@ -28,19 +28,11 @@ import Quartz
 import logging
 import logging.config
 from genkey import decode
-
+from config import allowed_devices,\
+                   user_credentials
 logging.config.fileConfig('logging.conf')
 logger = None
 
-allowed_devices = [
-    {"name": "<your device name>",
-     "addr": b"<your device address>"},
-]
-
-user_credentials = {
-    "user": "<your username (unused)>",
-    "password": b"<your encrypted password (see genkey.py code)>",
-}
 
 lock_allowed = False
 
