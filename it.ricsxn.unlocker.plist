@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC -//Apple Computer//DTD PLIST 1.0//EN http://www.apple.com/DTDs/PropertyList-1.0.dtd >
 <plist version="1.0">
   <dict>
+    <key>WorkingDirectory</key>
+    <string>%UNLOCKERPATH%</string>
     <key>Label</key>
     <string>it.ricsxn.unlocker</string>
     <key>Program</key>
@@ -11,9 +13,13 @@
       <string>%UNLOCKERPATH%/unlocker</string>
       <string>run</string>
     </array>
-    <key>WorkingDirectory</key>
-    <string>%UNLOCKERPATH%</string>
     <key>KeepAlive</key>
     <true/>
+    <!-- Enable following lines to monitor lauchd activity
+    <key>StandardOutPath</key>
+    <string>launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>launchd.log</string>
+    -->
   </dict>
 </plist>

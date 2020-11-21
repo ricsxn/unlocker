@@ -77,6 +77,7 @@ Execute again the `genkey.py` code to generate the encrypted password value:
 encrypted message: b'... the password encrypted value ...'
 dencrypted message: <... unencrypted password ...>
 ```
+
 /chmod
 
 **Attention** The execution above will print on the terminal the password, be aware of that. After this operation it is also highly recommended to remove the password value from varialbe `gen_password`.
@@ -120,11 +121,11 @@ This is the last step and requires only to execute a bash script that will insta
 
 ### 6) Take care of accessibility privilege
 
-New mac OS releases, may require to enable **accessibility** to both the `terminal` (in case the unlocker is manually launched from the terminal) and `bash`.
-To allow these requests, it is necessary to lock the screen, use the device to unlock the machine, then login manually (because the unlocker will be halted), and follow the instructions provided by Mac OS to enable the **accessibility** privilege.
+New mac OS releases, may require from **System Preferences** to enable: `Full Disk Access` and `Accessibility` privileges in **Security and Privacy/Privacy** for `/bin/bash` application. In case the unlocker is manually launched from the terminal, enable the same privileges for `Terminal` application.
+Sometime the OS system will request to unlock automatically these privileges by follow the instructions provided by Mac OS attempting to use the utility but logging manually untile all necessary rights have been reached. However this procedure is not always successful.
 
-**Attention** To monitor `unlocker` daemon activity, it is possible to open MacOS `console` application, select the system.log and filter by `ùnlocker` keyword.
+**Attention** To monitor `unlocker` daemon activity, it is possible to open MacOS `console` application, select the system.log and filter by `ùnlocker` keyword. It is also possible to log `launchd` activity activating commented lines into the `it.ricsxn.unlocker.plist` file.
 
-To monitor the `unlocker` internal activity, a log file named `unlocker.log` is generated. To configure the log behavior, just edit the file `logging.conf`. It is suggested to switch log levels to `INFO` rather than `DEBUG` which has to be used just for development purposes.
+To monitor the `unlocker` internal activity, a log file named `unlocker.log` is generated. To configure the log behavior, just edit the file `logging.conf`. It is suggested to switch log levels to `INFO` rather than the default `DEBUG` value, which has to be used just for development/debugging purposes.
 
-**Attention** IOS users may need to go on `Setting/Bluetooth` panel in order to make the device discoverable.
+**Attention** iOS users may need to go on `Setting/Bluetooth` panel in order to make the device discoverable.

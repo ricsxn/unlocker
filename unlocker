@@ -29,7 +29,7 @@ case "$@" in
     install
     ;;
   "run")
-    . ./venv/bin/activate && ./unlocker.py
+    . ./venv/bin/activate && python unlocker.py
     ;;
 *) cat <<EOF
 Use one of the following:
